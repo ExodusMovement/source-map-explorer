@@ -9,8 +9,7 @@ import {
   getFileContent,
   getCommonPathPrefix,
   getFirstRegexMatch,
-  detectEOL,
-  getOccurrencesCount,
+  splitLinesByEOL,
   isEOLAtPosition,
   mergeRanges,
 } from './helpers';
@@ -207,9 +206,8 @@ function computeFileSizes(
   // Remove inline source map comment, source map file comment and trailing EOLs
   const sourceContent = fileContent.replace(sourceMapComment, '').trim();
 
-  const eol = detectEOL(fileContent);
   // Assume only one type of EOL is used
-  const lines = sourceContent.split(eol);
+  const splitLines = splitLinesByEOL(sourceContent);
 
   const mappingRanges: MappingRange[][] = [];
 
@@ -227,7 +225,7 @@ function computeFileSizes(
     // Columns are 0-based, Lines are 1-based
 
     const lineIndex = generatedLine - 1;
-    const line = lines[lineIndex];
+    const line = splitLines[lineIndex]?.line;
 
     if (line === undefined) {
       if (options.noBorderChecks) {
@@ -237,7 +235,7 @@ function computeFileSizes(
       throw new AppError({
         code: 'InvalidMappingLine',
         generatedLine,
-        maxLine: lines.length,
+        maxLine: splitLines.length,
       });
     }
 
@@ -271,7 +269,7 @@ function computeFileSizes(
   const getSize = options.gzip ? gzipSize.sync : Buffer.byteLength;
 
   mappingRanges.forEach((lineRanges, lineIndex) => {
-    const line = lines[lineIndex];
+    const line = splitLines[lineIndex].line;
     const mergedRanges = mergeRanges(lineRanges);
 
     mergedRanges.forEach(({ start, end, source }) => {
@@ -293,7 +291,8 @@ function computeFileSizes(
   });
 
   const sourceMapCommentBytes = getSize(sourceMapComment);
-  const eolBytes = getOccurrencesCount(eol, fileContent) * Buffer.byteLength(eol);
+  const eolBytes = splitLines.reduce((r, { eol }) => r + Buffer.byteLength(eol), 0);
+
   const totalBytes = getSize(fileContent);
   let unmappedBytes: number | undefined;
 

@@ -61,8 +61,19 @@ export function getFirstRegexMatch(regex: RegExp, string: string): string | null
 const LF = '\n';
 const CR_LF = '\r\n';
 
-export function detectEOL(content: string): string {
-  return content.includes(CR_LF) ? CR_LF : LF;
+type SplitLine = { line: string; eol: string };
+
+export function splitLinesByEOL(content: string): SplitLine[] {
+  return content.split(CR_LF).reduce<SplitLine[]>(
+    (arr, e, i, { length }) =>
+      arr.concat(
+        e.split(LF).map((line, j, orig) => ({
+          line,
+          eol: j < orig.length - 1 || i === length - 1 ? LF : CR_LF,
+        }))
+      ),
+    []
+  );
 }
 
 /**
@@ -82,22 +93,29 @@ export function getOccurrencesCount(subString: string, string: string): number {
 }
 
 export function isEOLAtPosition(string: string, [line, column]: [number, number]): boolean {
-  const eol = detectEOL(string);
-  const eolLength = eol.length;
-
   let lineOffset = 0;
 
   for (let lineIndex = 1; lineIndex < line; lineIndex += 1) {
-    lineOffset = string.indexOf(eol, lineOffset);
+    const lineOffsetCrlf = string.indexOf(CR_LF, lineOffset);
+    const lineOffsetLf = string.indexOf(LF, lineOffset);
 
-    if (lineOffset === -1) {
+    if (lineOffsetCrlf === -1 && lineOffsetLf === -1) {
       return false;
+    } else if (lineOffsetCrlf === -1) {
+      lineOffset = lineOffsetLf;
+    } else if (lineOffsetLf === -1) {
+      lineOffset = lineOffsetCrlf;
+    } else {
+      lineOffset = Math.min(lineOffsetCrlf, lineOffsetLf);
     }
 
-    lineOffset += eolLength;
+    lineOffset += (lineOffset === lineOffsetCrlf ? CR_LF : LF).length;
   }
 
-  return string.substr(lineOffset + column, eolLength) === eol;
+  return (
+    string.substr(lineOffset + column, CR_LF.length) === CR_LF ||
+    string.substr(lineOffset + column, LF.length) === LF
+  );
 }
 
 /**

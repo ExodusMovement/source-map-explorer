@@ -267,3 +267,8 @@ Procfile          text
 
 # ignore files (like .npmignore or .gitignore)
 *.*ignore         text
+
+# Snapshots with custom line endings
+tests/data/mixed-eol.js         binary
+tests/data/mixed-eol.js.map     binary
+

@@ -7,11 +7,24 @@ import {
   getOccurrencesCount,
   isEOLAtPosition,
   mergeRanges,
+  splitLinesByEOL,
 } from '../../src/lib/helpers';
 
 import type { MappingRange } from '../../src/lib/types';
 
 describe('helpers', () => {
+  describe('splitLinesByEOL', () => {
+    it('should separate lines by eol', () => {
+      expect(splitLinesByEOL('a\nb\r\nc\n\r\n\ne')).to.deep.equal([
+        { line: 'a', eol: '\n' },
+        { line: 'b', eol: '\r\n' },
+        { line: 'c', eol: '\n' },
+        { line: '', eol: '\r\n' },
+        { line: '', eol: '\n' },
+        { line: 'e', eol: '\n' },
+      ]);
+    });
+  });
   describe('formatBytes', () => {
     const tests: { bytes: number; expected: string }[] = [
       { bytes: 0, expected: '0 B' },

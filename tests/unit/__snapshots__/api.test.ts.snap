@@ -85,18 +85,18 @@ exports['api explore should generate data calculating gzip size 1'] = {
     {
       "bundleName": "data/foo.min.js",
       "totalBytes": 392,
-      "mappedBytes": 510,
+      "mappedBytes": 511,
       "eolBytes": 1,
       "sourceMapCommentBytes": 55,
       "files": {
         "../../node_modules/browser-pack/_prelude.js": {
-          "size": 300
+          "size": 299
         },
         "src/bar.js": {
-          "size": 108
+          "size": 107
         },
         "src/foo.js": {
-          "size": 102
+          "size": 105
         },
         "[sourceMappingURL]": {
           "size": 55
@@ -108,22 +108,22 @@ exports['api explore should generate data calculating gzip size 1'] = {
     },
     {
       "bundleName": "data/inline-map.js",
-      "totalBytes": 1576,
-      "mappedBytes": 510,
+      "totalBytes": 1592,
+      "mappedBytes": 511,
       "eolBytes": 1,
-      "sourceMapCommentBytes": 1208,
+      "sourceMapCommentBytes": 1222,
       "files": {
         "../../node_modules/browser-pack/_prelude.js": {
-          "size": 300
+          "size": 299
         },
         "src/bar.js": {
-          "size": 108
+          "size": 107
         },
         "src/foo.js": {
-          "size": 102
+          "size": 105
         },
         "[sourceMappingURL]": {
-          "size": 1208
+          "size": 1222
         },
         "[EOLs]": {
           "size": 1
@@ -280,8 +280,8 @@ exports['api explore should generate data when provided with file with separated
       "bundleName": "data/no-map-comment.js",
       "totalBytes": 682,
       "mappedBytes": 681,
-      "unmappedBytes": 1,
-      "eolBytes": 0,
+      "unmappedBytes": 0,
+      "eolBytes": 1,
       "sourceMapCommentBytes": 0,
       "files": {
         "../../node_modules/browser-pack/_prelude.js": {
@@ -297,17 +297,63 @@ exports['api explore should generate data when provided with file with separated
           "size": 0
         },
         "[unmapped]": {
+          "size": 0
+        },
+        "[EOLs]": {
           "size": 1
+        }
+      }
+    }
+  ],
+  "errors": []
+}
+
+exports['api explore should generate data when provided with file with separated map file using mixed line endings 1'] = {
+  "bundles": [
+    {
+      "bundleName": "data/mixed-eol.js",
+      "totalBytes": 44590,
+      "mappedBytes": 34424,
+      "unmappedBytes": 8812,
+      "eolBytes": 1317,
+      "sourceMapCommentBytes": 37,
+      "files": {
+        "/private/tmp/tmp/node_modules/metro-runtime/src/polyfills/require.js": {
+          "size": 4802
+        },
+        "/private/tmp/tmp/node_modules/@react-native/polyfills/console.js": {
+          "size": 9981
+        },
+        "/private/tmp/tmp/node_modules/@react-native/polyfills/error-guard.js": {
+          "size": 1587
+        },
+        "/private/tmp/tmp/node_modules/@react-native/polyfills/Object.es8.js": {
+          "size": 800
+        },
+        "/private/tmp/tmp/index.js": {
+          "size": 73
+        },
+        "/private/tmp/tmp/node_modules/js-sha3/src/sha3.js": {
+          "size": 17181
+        },
+        "[sourceMappingURL]": {
+          "size": 37
+        },
+        "[unmapped]": {
+          "size": 8812
+        },
+        "[EOLs]": {
+          "size": 1317
         }
       }
     }
   ],
   "errors": [
     {
-      "bundleName": "data/no-map-comment.js",
+      "bundleName": "data/mixed-eol.js",
       "isWarning": true,
       "code": "UnmappedBytes",
-      "message": "Unable to map 1/682 bytes (0.15%)"
+      "message": "Unable to map 8812/44590 bytes (19.76%)"
     }
   ]
 }

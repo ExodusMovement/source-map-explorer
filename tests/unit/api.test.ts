@@ -26,6 +26,15 @@ describe('api', () => {
       snapshot(actual);
     });
 
+    it('should generate data when provided with file with separated map file using mixed line endings', async () => {
+      const actual = await explore({
+        code: 'data/mixed-eol.js',
+        map: 'data/mixed-eol.js.map',
+      });
+
+      snapshot(actual);
+    });
+
     it('should generate data when provided with file with separated map file', async () => {
       const actual = await explore({
         code: 'data/no-map-comment.js',
@@ -371,6 +380,10 @@ describe('api', () => {
             map: undefined,
           },
           { code: 'data/map-reference-eol.js', map: undefined },
+          {
+            code: 'data/mixed-eol.js',
+            map: 'data/mixed-eol.js.map',
+          },
           {
             code: 'data/no-map-comment.js',
             map: 'data/no-map-comment.js.map',

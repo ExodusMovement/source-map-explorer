@@ -1,3 +1,7 @@
+## Notes
+
+- Introduce support for handling bundles which contain multiple endings.
+
 [![Build Status](https://travis-ci.org/danvk/source-map-explorer.svg?branch=master)](https://travis-ci.org/danvk/source-map-explorer)
 [![NPM version](https://img.shields.io/npm/v/source-map-explorer.svg)](https://www.npmjs.org/package/source-map-explorer)
 [![install size](https://packagephobia.now.sh/badge?p=source-map-explorer)](https://packagephobia.now.sh/result?p=source-map-explorer)

@@ -1,6 +1,6 @@
 import { URL } from 'url';
 
-import { getFileContent, detectEOL } from './helpers';
+import { getFileContent, splitLinesByEOL } from './helpers';
 import { AppError } from './app-error';
 
 import type { Bundle, Coverage, ColumnsRange, MappingRange, FileDataMap } from './types';
@@ -11,14 +11,12 @@ import type { Bundle, Coverage, ColumnsRange, MappingRange, FileDataMap } from '
 function convertRangesToLinesRanges(coverage: Coverage): ColumnsRange[][] {
   const { ranges, text } = coverage;
 
-  const eol = detectEOL(text);
-  const eolLength = eol.length;
-  const lines = text.split(eol);
+  const splitLines = splitLinesByEOL(text);
 
   // Current line offset
   let offset = 0;
 
-  const lineRanges = lines.map((line) => {
+  const lineRanges = splitLines.map(({ line, eol }) => {
     const lineLength = line.length;
 
     if (lineLength === 0) {
@@ -53,7 +51,7 @@ function convertRangesToLinesRanges(coverage: Coverage): ColumnsRange[][] {
     }, []);
 
     // Move to next line jumping over EOL character
-    offset = lineEnd + eolLength;
+    offset = lineEnd + eol.length;
 
     return lineRanges;
   });
