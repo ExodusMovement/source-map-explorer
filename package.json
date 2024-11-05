@@ -1,8 +1,9 @@
 {
-  "name": "source-map-explorer",
-  "version": "2.5.3",
+  "name": "@exodus/source-map-explorer",
+  "version": "2.5.4",
   "description": "Analyze and debug space usage through source maps",
   "main": "lib/index.js",
+  "upstream": "https://github.com/danvk/source-map-explorer/tree/v2.5.3",
   "bin": {
     "source-map-explorer": "bin/cli.js",
     "sme": "bin/cli.js"
